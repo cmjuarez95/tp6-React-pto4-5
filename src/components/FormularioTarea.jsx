@@ -2,7 +2,8 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import ListaTarea from "./listaTarea";
 import { useForm } from "react-hook-form"
-import { useState } from "react";
+import { useEffect, useState } from "react";
+useEffect
 
 const FormularioTarea = () => {
     const {
@@ -12,16 +13,26 @@ const FormularioTarea = () => {
         formState: { errors },
     } = useForm()
 
-    const [tareas, setTareas] =useState([]);
+    const tareasLocalstorage = JSON.parse(localStorage.getItem("tareasKey")) || []   //toma los valores del localstorage salvo q este vacio crea un array nuevo
+    const [tareas, setTareas] =useState(tareasLocalstorage); //hago que use el estado de la variable con el local storage
+
+    useEffect(()=>{
+        localStorage.setItem("tareasKey",JSON.stringify(tareas))
+    },[tareas]) //Para guardar las tareas en el localstorage.
 
     const posteriorValidacion = (data) =>{
 
-        console.log(data.tarea)
         //guardar tarea en el array
         setTareas([...tareas,data.tarea])
         
         //limpiar el formulario
         reset()
+
+    }
+
+    const borrarTarea=(nombreTarea) =>{
+        const tareasFiltradas = tareas.filter((itemTarea)=> itemTarea !== nombreTarea)
+        setTareas(tareasFiltradas)
 
     }
 
@@ -52,7 +63,7 @@ const FormularioTarea = () => {
                 {errors.tarea?.message} 
                 </Form.Text>
             </Form>
-            <ListaTarea tareas={tareas}></ListaTarea>
+            <ListaTarea tareas={tareas} borrarTarea={borrarTarea}></ListaTarea>
         </section>
     );
 };
