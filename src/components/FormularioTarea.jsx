@@ -1,6 +1,6 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import ListaTarea from "./listaTarea";
+import ListaTarea from "./ListaTarea";
 import { useForm } from "react-hook-form"
 import { useEffect, useState } from "react";
 useEffect
